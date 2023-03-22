@@ -4,7 +4,7 @@ fun main() {
 
     val basePrice = 5000L
     println("Base price : $basePrice")
-    println("---------------------------------")
+    println("--------------------------")
 
     val etaPriceHandler = EtaPriceHandler(20)
     val surgePriceHandler = SurgePriceHandler(1.1f)
@@ -21,7 +21,7 @@ fun main() {
     discountPriceHandler.setNext(tollPriceHandler)
 
     val finalPrice = etaPriceHandler.handle(basePrice)
-    println("---------------------------------")
+    println("--------------------------")
     println("Final price: $finalPrice")
 }
 
