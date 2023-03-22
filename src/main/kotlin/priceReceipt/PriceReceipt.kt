@@ -3,14 +3,8 @@ package priceReceipt
 fun main() {
 
     val basePrice = 5000L
-//    val priceHandlers = listOf(
-//        EtaPriceHandler(20),
-//        SurgePriceHandler(1.1f),
-//        WaitingTimePriceHandler(20),
-//        WheelchairPriceHandler(),
-//        DiscountPriceHandler(30),
-//        TollPriceHandler()
-//    )
+    println("Base price : $basePrice")
+    println("---------------------------------")
 
     val etaPriceHandler = EtaPriceHandler(20)
     val surgePriceHandler = SurgePriceHandler(1.1f)
@@ -27,6 +21,7 @@ fun main() {
     discountPriceHandler.setNext(tollPriceHandler)
 
     val finalPrice = etaPriceHandler.handle(basePrice)
+    println("---------------------------------")
     println("Final price: $finalPrice")
 }
 
