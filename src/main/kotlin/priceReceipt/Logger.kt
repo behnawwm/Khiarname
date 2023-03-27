@@ -1,8 +1,8 @@
 package priceReceipt
 
-interface Logger {
-    fun log(input: String)
-}
+//interface Logger {
+//    fun log(input: String)
+//}
 
 interface PriceLogger {
     fun log(price: Price)
