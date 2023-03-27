@@ -5,7 +5,10 @@ import priceReceipt.PriceHandler
 import priceReceipt.PriceLogger
 import priceReceipt.TagOnlyPriceLogger
 
-class DiscountPriceHandler(private val percent: Int, logger: PriceLogger = TagOnlyPriceLogger("Discount")) :
+class DiscountPriceHandler(
+    private val percent: Int,
+    logger: PriceLogger = TagOnlyPriceLogger("Discount")
+) :
     PriceHandler(logger) {
 
     override fun calculateNewPrice(prevPrice: Price): Price {

@@ -1,9 +1,5 @@
 package priceReceipt
 
-//interface Logger {
-//    fun log(input: String)
-//}
-
 interface PriceLogger {
     fun log(price: Price)
 }
@@ -27,7 +23,7 @@ class GeneralHeaderLogger : HeaderLogger {
     override fun log(price: Price) {
         val tag = "Base price:"
         val formattedPrice = price.formatPrice()
-        println(tag.padEnd(20) + formattedPrice)
+        println(tag.padEnd(20) + formattedPrice)      //todo replace 20 with maxTagLength
     }
 
     override fun logSeparator() {
