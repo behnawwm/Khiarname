@@ -12,35 +12,46 @@ interface FooterLogger : PriceLogger {
     fun logSeparator()
 }
 
-class TagOnlyPriceLogger(private val tag: String) : PriceLogger {
+class TagOnlyPriceLogger(
+    private val tag: String,
+    private val tagEndPadLength: Int = 20,  //todo replace with max length between all tags
+) : PriceLogger {
     override fun log(price: Price) {
         val formattedPrice = price.formatPrice()
-        println(tag.padEnd(20) + formattedPrice)    //todo replace 20 with maxTagLength
+        println(tag.padEnd(tagEndPadLength) + formattedPrice)
     }
 }
 
-class GeneralHeaderLogger : HeaderLogger {
+class GeneralHeaderLogger(
+    private val tagEndPadLength: Int = 20,  //todo replace with max length between all tags
+    private val separatorLength: Int = 26,  //todo replace with max length between all prices
+    private val tag: String = "Base price:",
+) : HeaderLogger {
+
     override fun log(price: Price) {
-        val tag = "Base price:"
         val formattedPrice = price.formatPrice()
-        println(tag.padEnd(20) + formattedPrice)      //todo replace 20 with maxTagLength
+        println(tag.padEnd(tagEndPadLength) + formattedPrice)
     }
 
     override fun logSeparator() {
-        println("--------------------------")
+        println("-".repeat(separatorLength))
     }
 
 }
 
-class GeneralFooterLogger : FooterLogger {
+class GeneralFooterLogger(
+    private val tagEndPadLength: Int = 20,  //todo replace with max length between all tags
+    private val separatorLength: Int = 26,  //todo replace with max length between all prices
+    private val tag: String = "Final price:"
+) : FooterLogger {
+
     override fun log(price: Price) {
-        val tag = "Final price:"
         val formattedPrice = price.formatPrice()
-        println(tag.padEnd(20) + formattedPrice)
+        println(tag.padEnd(tagEndPadLength) + formattedPrice)
     }
 
     override fun logSeparator() {
-        println("--------------------------")
+        println("-".repeat(separatorLength))
     }
 
 }

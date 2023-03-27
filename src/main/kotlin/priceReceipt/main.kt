@@ -22,9 +22,9 @@ fun main() {
         tollPriceHandler
     )
 
-    val receiptHandler = ReceiptHandler(
+    val receiptHandler = ReceiptHandler()
+    val finalPrice = receiptHandler.handleAllAndLog(
         handlerList = handlerList,
         basePrice = basePrice,
     )
-    val finalPrice = receiptHandler.handleAllAndLog()
 }

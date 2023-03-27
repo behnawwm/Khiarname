@@ -1,16 +1,15 @@
 package priceReceipt
 
 class ReceiptHandler(
-    private val handlerList: List<PriceHandler>,
-    private val basePrice: Price,
     private val headerLogger: HeaderLogger = GeneralHeaderLogger(),
     private val footerLogger: FooterLogger = GeneralFooterLogger()
 ) {
-    fun handleAllAndLog(): Price {
-        headerLogger.log(basePrice)
-        headerLogger.logSeparator()
+    fun handleAllAndLog(handlerList: List<PriceHandler>, basePrice: Price): Price {
+        logHeader(basePrice)
 
-        val first = handlerList.firstOrNull() ?: return basePrice //todo log
+        val first = handlerList.firstOrNull() ?: return basePrice.also {
+            logHeader(it)
+        }
 
         for (i in 0 until handlerList.size - 1) {
             val currentItem = handlerList[i]
@@ -19,8 +18,17 @@ class ReceiptHandler(
         }
 
         return first.handle(basePrice).also { finalPrice ->
-            footerLogger.logSeparator()
-            footerLogger.log(finalPrice)
+            logFooter(finalPrice)
         }
+    }
+
+    private fun logHeader(basePrice: Price) {
+        headerLogger.log(basePrice)
+        headerLogger.logSeparator()
+    }
+
+    private fun logFooter(finalPrice: Price) {
+        footerLogger.logSeparator()
+        footerLogger.log(finalPrice)
     }
 }
