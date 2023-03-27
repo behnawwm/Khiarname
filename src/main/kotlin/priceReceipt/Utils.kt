@@ -1,5 +1,5 @@
 package priceReceipt
 
-fun Price.formatPrice(): String {
+fun Price.formatToThousands(): String {
     return value.toString().reversed().chunked(3).joinToString(separator = ",").reversed()
 }

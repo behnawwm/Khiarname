@@ -1,5 +1,8 @@
 package priceReceipt
 
+import priceReceipt.logger.GeneralFooterLogger
+import priceReceipt.logger.GeneralHeaderLogger
+
 class ReceiptHandler(
     private val headerLogger: HeaderLogger = GeneralHeaderLogger(),
     private val footerLogger: FooterLogger = GeneralFooterLogger()

@@ -2,11 +2,12 @@ package priceReceipt.handler
 
 import priceReceipt.Price
 import priceReceipt.PriceHandler
-import priceReceipt.TagOnlyPriceLogger
+import priceReceipt.PriceLogger
+import priceReceipt.logger.TagOnlyPriceLogger
 
 class SurgePriceHandler(
     private val amount: Float,
-    logger: TagOnlyPriceLogger = TagOnlyPriceLogger("Surge")
+    logger: PriceLogger = TagOnlyPriceLogger("Surge")
 ) :
     PriceHandler(logger) {
 

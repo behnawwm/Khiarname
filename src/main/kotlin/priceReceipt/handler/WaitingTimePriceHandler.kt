@@ -3,7 +3,7 @@ package priceReceipt.handler
 import priceReceipt.Price
 import priceReceipt.PriceHandler
 import priceReceipt.PriceLogger
-import priceReceipt.TagOnlyPriceLogger
+import priceReceipt.logger.TagOnlyPriceLogger
 
 class WaitingTimePriceHandler(
     private val minutes: Int,

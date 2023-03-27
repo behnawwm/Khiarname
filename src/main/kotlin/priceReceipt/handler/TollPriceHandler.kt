@@ -3,7 +3,7 @@ package priceReceipt.handler
 import priceReceipt.Price
 import priceReceipt.PriceHandler
 import priceReceipt.PriceLogger
-import priceReceipt.TagOnlyPriceLogger
+import priceReceipt.logger.TagOnlyPriceLogger
 
 class TollPriceHandler(
     private val percent: Float = 0.1f,
