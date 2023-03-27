@@ -2,9 +2,7 @@ package priceReceipt
 
 fun main() {
 
-    val basePrice = 5000L
-    println("Base price : $basePrice")
-    println("--------------------------")
+    val basePrice = Price(5000L)
 
     val etaPriceHandler = EtaPriceHandler(20)
     val surgePriceHandler = SurgePriceHandler(1.1f)
@@ -13,58 +11,79 @@ fun main() {
     val discountPriceHandler = DiscountPriceHandler(30)
     val tollPriceHandler = TollPriceHandler()
 
+    val handlerList = listOf(
+        etaPriceHandler,
+        surgePriceHandler,
+        waitingTimePriceHandler,
+        wheelchairPriceHandler,
+        discountPriceHandler,
+        tollPriceHandler
+    )
 
-    etaPriceHandler.setNext(surgePriceHandler)
-    surgePriceHandler.setNext(waitingTimePriceHandler)
-    waitingTimePriceHandler.setNext(wheelchairPriceHandler)
-    wheelchairPriceHandler.setNext(discountPriceHandler)
-    discountPriceHandler.setNext(tollPriceHandler)
-
-    val finalPrice = etaPriceHandler.handle(basePrice)
-    println("--------------------------")
-    println("Final price: $finalPrice")
+    val finalPrice = handlerList.handleAll(basePrice)
 }
+
+fun List<PriceHandler>.handleAll(basePrice: Price): Price {
+    println("Base price: ${basePrice.value}")
+    println("--------------------------")
+
+    val first = firstOrNull() ?: return basePrice //todo log
+
+    for (i in 0 until size - 1) {
+        val currentItem = get(i)
+        val nextItem = get(i + 1)
+        currentItem.setNext(nextItem)
+    }
+
+    return first.handle(basePrice).also { finalPrice ->
+        println("--------------------------")
+        println("Final price: ${finalPrice.value}")
+    }
+}
+
+@JvmInline
+value class Price(val value: Long)
 
 class EtaPriceHandler(private val minutes: Int, private val pricePerMinute: Long = 1000) :
     PriceHandler(PriceLogger("Eta")) {
 
-    override fun calculateNewPrice(prev: Long): Long {
-        return prev + (minutes * pricePerMinute)
+    override fun calculateNewPrice(prevPrice: Price): Price {
+        return Price(prevPrice.value + (minutes * pricePerMinute))
     }
 }
 
 class SurgePriceHandler(private val amount: Float) : PriceHandler(PriceLogger("Surge")) {
 
-    override fun calculateNewPrice(prev: Long): Long {
-        return (prev * amount).toLong()
+    override fun calculateNewPrice(prevPrice: Price): Price {
+        return Price((prevPrice.value * amount).toLong())
     }
 }
 
 class WaitingTimePriceHandler(private val minutes: Int, private val pricePerMinute: Long = 1000) :
     PriceHandler(PriceLogger("Waiting Time")) {
 
-    override fun calculateNewPrice(prev: Long): Long {
-        return prev + (minutes * pricePerMinute)
+    override fun calculateNewPrice(prevPrice: Price): Price {
+        return Price(prevPrice.value + (minutes * pricePerMinute))
     }
 }
 
 class WheelchairPriceHandler(private val reductionAmount: Long = 2000) : PriceHandler(PriceLogger("Wheelchair")) {
 
-    override fun calculateNewPrice(prev: Long): Long {
-        return prev - reductionAmount
+    override fun calculateNewPrice(prevPrice: Price): Price {
+        return Price(prevPrice.value - reductionAmount)
     }
 }
 
 class DiscountPriceHandler(private val percent: Int) : PriceHandler(PriceLogger("Discount")) {
 
-    override fun calculateNewPrice(prev: Long): Long {
-        return (prev * (100 - percent)) / 100
+    override fun calculateNewPrice(prevPrice: Price): Price {
+        return Price((prevPrice.value * (100 - percent)) / 100)
     }
 }
 
 class TollPriceHandler(private val percent: Float = 0.1f) : PriceHandler(PriceLogger("Toll")) {
 
-    override fun calculateNewPrice(prev: Long): Long {
-        return prev + (percent * prev).toLong()
+    override fun calculateNewPrice(prevPrice: Price): Price {
+        return Price(prevPrice.value + (percent * prevPrice.value).toLong())
     }
 }

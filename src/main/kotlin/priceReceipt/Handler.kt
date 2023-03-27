@@ -9,14 +9,14 @@ abstract class BaseHandler<T> : Handler<T> {
     protected var nextHandler: Handler<T>? = null
 }
 
-abstract class PriceHandler(private val logger: Logger) : BaseHandler<Long>() {
-    override fun setNext(handler: Handler<Long>) {
+abstract class PriceHandler(private val logger: Logger) : BaseHandler<Price>() {
+    override fun setNext(handler: Handler<Price>) {
         nextHandler = handler
     }
 
-    override fun handle(prev: Long): Long {
-        val calculatedPrice = calculateNewPrice(prev)
-        logger.log(calculatedPrice.toString())
+    override fun handle(prevPrice: Price): Price {
+        val calculatedPrice = calculateNewPrice(prevPrice)
+        logger.log(calculatedPrice.value.toString())
         return if (nextHandler == null) {
             calculatedPrice
         } else {
@@ -24,5 +24,5 @@ abstract class PriceHandler(private val logger: Logger) : BaseHandler<Long>() {
         }
     }
 
-    abstract fun calculateNewPrice(prev: Long): Long
+    abstract fun calculateNewPrice(prevPrice: Price): Price
 }
