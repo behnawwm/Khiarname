@@ -3,8 +3,8 @@ package priceReceipt
 class ReceiptHandler(
     private val handlerList: List<PriceHandler>,
     private val basePrice: Price,
-    private val headerLogger: HeaderLogger,
-    private val footerLogger: FooterLogger
+    private val headerLogger: HeaderLogger = GeneralHeaderLogger(),
+    private val footerLogger: FooterLogger = GeneralFooterLogger()
 ) {
     fun handleAllAndLog(): Price {
         headerLogger.log(basePrice)

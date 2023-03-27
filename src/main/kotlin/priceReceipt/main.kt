@@ -25,8 +25,6 @@ fun main() {
     val receiptHandler = ReceiptHandler(
         handlerList = handlerList,
         basePrice = basePrice,
-        headerLogger = GeneralHeaderLogger(),
-        footerLogger = GeneralFooterLogger()
     )
     val finalPrice = receiptHandler.handleAllAndLog()
 }
