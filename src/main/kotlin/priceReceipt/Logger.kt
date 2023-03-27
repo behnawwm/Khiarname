@@ -16,7 +16,7 @@ interface FooterLogger : PriceLogger {
     fun logSeparator()
 }
 
-class PriceLoggerImpl(private val tag: String) : PriceLogger {
+class TagOnlyPriceLogger(private val tag: String) : PriceLogger {
     override fun log(price: Price) {
         val formattedPrice = price.formatPrice()
         println(tag.padEnd(20) + formattedPrice)    //todo replace 20 with maxTagLength
