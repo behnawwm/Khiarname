@@ -5,15 +5,16 @@ fun main() {
     val initialRide = Ride(origin = null, destination = null, service = null)
     val initialState = State.Start(initialRide = initialRide)
 
-    val toAddOrigin = Location("1", "2")
-    val toAddDestination = Location("3", "4")
+    val toAddOrigin = Location(1, 2)
+    val toAddDestination = Location(3, 4)
     val toAddService = Ride.Service.Normal
 
 
     println("started")
 
-    val nextState = initialState.next()
+    var nextState = initialState.next()
     while (nextState !is State.End) {
+        println("state: $nextState")
         when (nextState) {
             is State.SelectOrigin -> {
                 nextState.setOrigin(origin = toAddOrigin)
@@ -30,7 +31,7 @@ fun main() {
             is State.Start -> {}
             is State.End -> {}
         }
-        nextState.next()
+        nextState = nextState.next()
     }
 
     println("finished")
@@ -132,8 +133,8 @@ sealed class State(val ride: Ride) {
 
 
 data class Location(
-    val lat: String,
-    val lon: String,
+    val lat: Long,
+    val lon: Long,
 )
 
 data class Ride(
