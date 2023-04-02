@@ -68,7 +68,7 @@ sealed class State(val ride: Ride) {
         }
 
         override fun back(): State {
-            TODO("Not yet implemented")
+            return Start(initialRide)
         }
 
         fun setOrigin(origin: Location) {
@@ -88,7 +88,7 @@ sealed class State(val ride: Ride) {
         }
 
         override fun back(): State {
-            TODO("Not yet implemented")
+            return SelectOrigin(initialRide)
         }
 
         fun setDestination(destination: Location) {
@@ -109,7 +109,7 @@ sealed class State(val ride: Ride) {
         }
 
         override fun back(): State {
-            TODO("Not yet implemented")
+            return SelectDestination(initialRide)
         }
 
         fun setService(service: Ride.Service) {
@@ -125,7 +125,7 @@ sealed class State(val ride: Ride) {
         }
 
         override fun back(): State {
-            TODO("Not yet implemented")
+            return SelectService(initialRide)
         }
     }
 
