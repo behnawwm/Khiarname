@@ -5,8 +5,8 @@ fun main() {
     val initialRide = Ride(origin = null, destination = null, service = null)
     val initialState = State.Start(initialRide = initialRide)
 
-    val toAddOrigin = Location(1, 2)
-    val toAddDestination = Location(3, 4)
+    val toAddOrigin = Location(1.0, 2.0)
+    val toAddDestination = Location(3.0, 4.0)
     val toAddService = Ride.Service.Normal
 
 
@@ -15,22 +15,6 @@ fun main() {
     var nextState = initialState.next()
     while (nextState !is State.End) {
         println("state: $nextState")
-        when (nextState) {
-            is State.SelectOrigin -> {
-                nextState.setOrigin(origin = toAddOrigin)
-            }
-
-            is State.SelectDestination -> {
-                nextState.setDestination(destination = toAddDestination)
-            }
-
-            is State.SelectService -> {
-                nextState.setService(service = toAddService)
-            }
-
-            is State.Start -> {}
-            is State.End -> {}
-        }
         nextState = nextState.next()
     }
 
@@ -54,67 +38,120 @@ sealed class State(val ride: Ride) {
             // nothing!
             return Start(initialRide)
         }
+
+        override fun toString(): String = "Start"
     }
 
     class SelectOrigin(private val initialRide: Ride) : State(initialRide) {
-        private var origin: Location? = null
 
         override fun next(): State {
-            return if (origin != null)
-                SelectDestination(initialRide.copy(origin = origin))
-            else {
-                SelectOrigin(initialRide)
+            val origin = getInputFromUser()
+            return SelectDestination(initialRide.copy(origin = origin))
+        }
+
+        private fun getInputFromUser(): Location {
+            println("Enter your origin:")
+
+            var lat: Double?
+            var lon: Double?
+
+            while (true) {
+                println("latitude:")
+                lat = readln().toDoubleOrNull()
+                if (lat != null)
+                    break
+                println("enter number only!")
             }
+
+            while (true) {
+                println("longitude:")
+                lon = readln().toDoubleOrNull()
+                if (lon != null)
+                    break
+                println("enter number only!")
+            }
+            return Location(lat!!, lon!!)
         }
 
         override fun back(): State {
             return Start(initialRide)
         }
 
-        fun setOrigin(origin: Location) {
-            this.origin = origin
-        }
+        override fun toString(): String = "SelectOrigin"
+
     }
 
     class SelectDestination(private val initialRide: Ride) : State(initialRide) {
-        private var destination: Location? = null
-
         override fun next(): State {
-            return if (destination != null)
-                SelectService(initialRide.copy(destination = destination))
-            else {
-                SelectDestination(initialRide)
-            }
+            val destination = getInputFromUser()
+            return SelectService(initialRide.copy(destination = destination))
         }
 
         override fun back(): State {
             return SelectOrigin(initialRide)
         }
 
-        fun setDestination(destination: Location) {
-            this.destination = destination
+        private fun getInputFromUser(): Location {
+            println("Enter your destination:")
+
+            var lat: Double?
+            var lon: Double?
+
+            while (true) {
+                println("latitude:")
+                lat = readln().toDoubleOrNull()
+                if (lat != null)
+                    break
+                println("enter number only!")
+            }
+
+            while (true) {
+                println("longitude:")
+                lon = readln().toDoubleOrNull()
+                if (lon != null)
+                    break
+                println("enter number only!")
+            }
+            return Location(lat!!, lon!!)
         }
+
+        override fun toString(): String = "SelectDestination"
     }
 
 
     class SelectService(private val initialRide: Ride) : State(initialRide) {
-        private var service: Ride.Service? = null
+        private val availableServices =
+            listOf(Ride.Service.Normal, Ride.Service.Line(true, 2), Ride.Service.Peyk(""))
 
         override fun next(): State {
-            return if (service != null)
-                End(initialRide.copy(service = service))
-            else {
-                SelectDestination(initialRide)
-            }
+            val service = getInputFromUser()
+            return End(initialRide.copy(service = service))
         }
 
         override fun back(): State {
             return SelectDestination(initialRide)
         }
 
-        fun setService(service: Ride.Service) {
-            this.service = service
+        private fun getInputFromUser(): Ride.Service {
+            println("Enter your service number:")
+            availableServices.forEachIndexed { index, service ->
+                println("$index. $service")
+            }
+
+            var serviceNumber: Int?
+
+            while (true) {
+                println("Service number:")
+                serviceNumber = readln().toIntOrNull()
+                if (serviceNumber != null && serviceNumber in availableServices.indices)
+                    break
+                println("enter number only!")
+            }
+
+            return availableServices[serviceNumber!!]
         }
+
+        override fun toString(): String = "SelectService"
     }
 
     class End(private val initialRide: Ride) : State(initialRide) {
@@ -127,14 +164,16 @@ sealed class State(val ride: Ride) {
         override fun back(): State {
             return SelectService(initialRide)
         }
+
+        override fun toString(): String = "End"
     }
 
 }
 
 
 data class Location(
-    val lat: Long,
-    val lon: Long,
+    val lat: Double,
+    val lon: Double,
 )
 
 data class Ride(
@@ -143,9 +182,17 @@ data class Ride(
     val service: Service?,
 ) {
     sealed class Service {
-        object Normal : Service()
-        class Peyk(val description: String) : Service()
-        class Line(val hasSeenGuide: Boolean, val seatCount: Int) : Service()
+        object Normal : Service() {
+            override fun toString(): String = "Normal"
+        }
+
+        class Peyk(val description: String) : Service() {
+            override fun toString(): String = "Peyk"
+        }
+
+        class Line(val hasSeenGuide: Boolean, val seatCount: Int) : Service() {
+            override fun toString(): String = "Line"
+        }
     }
 }
 
