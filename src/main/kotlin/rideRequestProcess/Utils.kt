@@ -4,7 +4,7 @@ fun <T> readFromCli(
     onInitial: () -> Unit,
     onStepInitial: () -> Unit, //todo choose a better name!
     inputDataMapper: (String) -> T?,
-    dataPredicate: (T?) -> Boolean,
+    dataPredicate: (T?) -> Boolean, //todo migrate to Result
     onError: (T?) -> Unit
 ): T {
     onInitial()

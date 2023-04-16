@@ -33,7 +33,7 @@ sealed class State(val ride: Ride) {
 
             val lat = readFromCli(
                 onInitial = {},
-                onStepInitial = { println("latitude:") },
+                onStepInitial = { println("Latitude:") },
                 inputDataMapper = { it.toDoubleOrNull() },
                 dataPredicate = { it != null },
                 onError = { println("enter number only!") }
@@ -41,10 +41,10 @@ sealed class State(val ride: Ride) {
 
             val lon = readFromCli(
                 onInitial = {},
-                onStepInitial = { println("longitude:") },
+                onStepInitial = { println("Longitude:") },
                 inputDataMapper = { it.toDoubleOrNull() },
                 dataPredicate = { it != null },
-                onError = { println("enter number only!") }
+                onError = { println("Enter number only!") }
             )
 
             return Location(lat, lon)
@@ -73,18 +73,18 @@ sealed class State(val ride: Ride) {
 
             val lat = readFromCli(
                 onInitial = { println("Enter latitude:") },
-                onStepInitial = { println("latitude:") },
+                onStepInitial = { println("Latitude:") },
                 inputDataMapper = { it.toDoubleOrNull() },
                 dataPredicate = { it != null },
-                onError = { println("enter number only!") }
+                onError = { println("Enter number only!") }
             )
 
             val lon = readFromCli(
                 onInitial = { println("Enter longitude:") },
-                onStepInitial = { println("longitude:") },
+                onStepInitial = { println("Longitude:") },
                 inputDataMapper = { it.toDoubleOrNull() },
                 dataPredicate = { it != null },
-                onError = { println("enter number only!") }
+                onError = { println("Enter number only!") }
             )
 
             return Location(lat, lon)
@@ -123,7 +123,13 @@ sealed class State(val ride: Ride) {
                 onStepInitial = { println("Service number:") },
                 inputDataMapper = { it.toIntOrNull() },
                 dataPredicate = { serviceNumber -> serviceNumber != null && serviceNumber in availableServices.indices },
-                onError = { println("enter number only!") }
+                onError = { serviceNumber ->
+                    when (serviceNumber) {
+                        null -> println("Enter number only")
+                        in availableServices.indices -> println("Enter correct item index")
+                        else -> println("Wrong input")
+                    }
+                }
             )
 
             return availableServices[serviceNumber]
