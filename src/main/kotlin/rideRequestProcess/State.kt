@@ -31,25 +31,23 @@ sealed class State(val ride: Ride) {
         private fun getInputFromUser(): Location {
             println("Enter your origin:")
 
-            var lat: Double?
-            var lon: Double?
+            val lat = readFromCli(
+                onInitial = {},
+                onStepInitial = { println("latitude:") },
+                inputDataMapper = { it.toDoubleOrNull() },
+                dataPredicate = { it != null },
+                onError = { println("enter number only!") }
+            )
 
-            while (true) {
-                println("latitude:")
-                lat = readln().toDoubleOrNull()
-                if (lat != null)
-                    break
-                println("enter number only!")
-            }
+            val lon = readFromCli(
+                onInitial = {},
+                onStepInitial = { println("longitude:") },
+                inputDataMapper = { it.toDoubleOrNull() },
+                dataPredicate = { it != null },
+                onError = { println("enter number only!") }
+            )
 
-            while (true) {
-                println("longitude:")
-                lon = readln().toDoubleOrNull()
-                if (lon != null)
-                    break
-                println("enter number only!")
-            }
-            return Location(lat!!, lon!!)
+            return Location(lat, lon)
         }
 
         override fun back(): State {
@@ -73,25 +71,23 @@ sealed class State(val ride: Ride) {
         private fun getInputFromUser(): Location {
             println("Enter your destination:")
 
-            var lat: Double?
-            var lon: Double?
+            val lat = readFromCli(
+                onInitial = {},
+                onStepInitial = { println("latitude:") },
+                inputDataMapper = { it.toDoubleOrNull() },
+                dataPredicate = { it != null },
+                onError = { println("enter number only!") }
+            )
 
-            while (true) {
-                println("latitude:")
-                lat = readln().toDoubleOrNull()
-                if (lat != null)
-                    break
-                println("enter number only!")
-            }
+            val lon = readFromCli(
+                onInitial = {},
+                onStepInitial = { println("longitude:") },
+                inputDataMapper = { it.toDoubleOrNull() },
+                dataPredicate = { it != null },
+                onError = { println("enter number only!") }
+            )
 
-            while (true) {
-                println("longitude:")
-                lon = readln().toDoubleOrNull()
-                if (lon != null)
-                    break
-                println("enter number only!")
-            }
-            return Location(lat!!, lon!!)
+            return Location(lat, lon)
         }
 
         override fun toString(): String = "SelectDestination"
@@ -113,21 +109,20 @@ sealed class State(val ride: Ride) {
 
         private fun getInputFromUser(): Ride.Service {
             println("Enter your service number:")
-            availableServices.forEachIndexed { index, service ->
-                println("$index. $service")
-            }
 
-            var serviceNumber: Int?
+            val serviceNumber = readFromCli(
+                onInitial = {
+                    availableServices.forEachIndexed { index, service ->
+                        println("$index. $service")
+                    }
+                },
+                onStepInitial = { println("Service number:") },
+                inputDataMapper = { it.toIntOrNull() },
+                dataPredicate = { serviceNumber -> serviceNumber != null && serviceNumber in availableServices.indices },
+                onError = { println("enter number only!") }
+            )
 
-            while (true) {
-                println("Service number:")
-                serviceNumber = readln().toIntOrNull()
-                if (serviceNumber != null && serviceNumber in availableServices.indices)
-                    break
-                println("enter number only!")
-            }
-
-            return availableServices[serviceNumber!!]
+            return availableServices[serviceNumber]
         }
 
         override fun toString(): String = "SelectService"
