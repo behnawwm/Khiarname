@@ -29,7 +29,7 @@ sealed class State(val ride: Ride) {
         }
 
         private fun getInputFromUser(): Location {
-            println("Enter your origin:")
+            println("------ Select your origin ------")
 
             val lat = readFromCli(
                 onInitial = {},
@@ -69,10 +69,10 @@ sealed class State(val ride: Ride) {
         }
 
         private fun getInputFromUser(): Location {
-            println("Enter your destination:")
+            println("------ Select your destination ------")
 
             val lat = readFromCli(
-                onInitial = {},
+                onInitial = { println("Enter latitude:") },
                 onStepInitial = { println("latitude:") },
                 inputDataMapper = { it.toDoubleOrNull() },
                 dataPredicate = { it != null },
@@ -80,7 +80,7 @@ sealed class State(val ride: Ride) {
             )
 
             val lon = readFromCli(
-                onInitial = {},
+                onInitial = { println("Enter longitude:") },
                 onStepInitial = { println("longitude:") },
                 inputDataMapper = { it.toDoubleOrNull() },
                 dataPredicate = { it != null },
@@ -96,7 +96,11 @@ sealed class State(val ride: Ride) {
 
     class SelectService(private val initialRide: Ride) : State(initialRide) {
         private val availableServices =
-            listOf(Ride.Service.Normal, Ride.Service.Line(true, 2), Ride.Service.Peyk(""))
+            listOf(
+                Ride.Service.Normal,
+                Ride.Service.Line(true, 2),
+                Ride.Service.Peyk("")
+            )
 
         override fun next(): State {
             val service = getInputFromUser()
@@ -108,10 +112,10 @@ sealed class State(val ride: Ride) {
         }
 
         private fun getInputFromUser(): Ride.Service {
-            println("Enter your service number:")
 
             val serviceNumber = readFromCli(
                 onInitial = {
+                    println("------ Select your service number ------")
                     availableServices.forEachIndexed { index, service ->
                         println("$index. $service")
                     }

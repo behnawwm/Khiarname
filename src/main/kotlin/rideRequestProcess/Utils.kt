@@ -9,10 +9,11 @@ fun <T> readFromCli(
 ): T {
     onInitial()
     var data: T?
+
     while (true) {
         onStepInitial()
-        val test = readln()
-        data = inputDataMapper(test)
+        val input = readln()
+        data = inputDataMapper(input)
         if (dataPredicate(data))
             break
         onError(data)
