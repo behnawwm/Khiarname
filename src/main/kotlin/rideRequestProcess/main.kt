@@ -5,11 +5,6 @@ fun main() {
     val initialRide = Ride(origin = null, destination = null, service = null)
     val initialState = State.Start(initialRide = initialRide)
 
-    val toAddOrigin = Location(1.0, 2.0)
-    val toAddDestination = Location(3.0, 4.0)
-    val toAddService = Ride.Service.Normal
-
-
     println("started")
 
     var nextState = initialState.next()
@@ -19,6 +14,7 @@ fun main() {
     }
 
     println("finished")
+    println("result ride: ${nextState.ride}")
 }
 
 sealed class State(val ride: Ride) {
