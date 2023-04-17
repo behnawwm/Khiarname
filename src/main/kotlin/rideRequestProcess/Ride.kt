@@ -10,12 +10,8 @@ data class Ride(
             override fun toString(): String = "Normal"
         }
 
-        class Peyk(val description: String) : Service() {
-            override fun toString(): String = "Peyk"
-        }
+        data class Peyk(val description: String) : Service()
 
-        class Line(val hasSeenGuide: Boolean, val seatCount: Int) : Service() {
-            override fun toString(): String = "Line"
-        }
+        data class Line(val hasSeenGuide: Boolean, val seatCount: Int) : Service()
     }
 }
