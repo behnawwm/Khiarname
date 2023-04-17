@@ -6,12 +6,18 @@ data class Ride(
     val service: Service?,
 ) {
     sealed class Service {
+        abstract val simpleName: String
+
         object Normal : Service() {
-            override fun toString(): String = "Normal"
+            override val simpleName = "Normal"
         }
 
-        data class Peyk(val description: String) : Service()
+        data class Peyk(val description: String) : Service(){
+            override val simpleName = "Peyk"
+        }
 
-        data class Line(val hasSeenGuide: Boolean, val seatCount: Int) : Service()
+        data class Line(val hasSeenGuide: Boolean, val seatCount: Int) : Service(){
+            override val simpleName = "Line"
+        }
     }
 }

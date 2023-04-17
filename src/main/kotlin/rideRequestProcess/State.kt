@@ -120,7 +120,7 @@ sealed class State(val ride: Ride) {
                 onInitial = {
                     println("------ Select your service number ------")
                     availableServices.forEachIndexed { index, service ->
-                        println("$index. $service")
+                        println("$index. ${service.simpleName}")
                     }
                 },
                 onStepInitial = { println("Service number:") },
